@@ -3,6 +3,8 @@ A simple Python script which utilises marching cubes algorithm(skimage library) 
 
 Python 3.7 or above
 
+Note: obj files can be previewed on 3D viewer(from microsoft store)
+
 Dependencies:
 soontm hehe xd 
 
