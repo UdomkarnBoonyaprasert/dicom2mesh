@@ -3,6 +3,7 @@
 import numpy as np
 import nibabel as nib
 import fileHandler
+import platform
 
 #-----------Unix uses "/", whereas Windows uses "\"-----------
 slash = "/"
@@ -10,6 +11,8 @@ runningPlatform = platform.system()
 if runningPlatform == "Windows":
 	slash = "\\"
 #-------------------------------------------------------------
+
+cwd = fileHandler.cwd
 
 numpyPath = cwd + "numpys" + slash
 niftiPath = cwd + "imgs" + slash + "nifti" + slash
