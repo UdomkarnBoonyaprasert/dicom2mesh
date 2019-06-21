@@ -25,6 +25,9 @@ Python 3.7 or above
    - 300, third argument being the Housfield used for the thresholding in marching cube algorithm. In this example, 300 is used for             bones. For the sample Nifti file please use 30 or above as it has already been segmented.
    - "abdomen_mesh", the fourth argument. Once the mesh has successfully generated, it will be saved in output/OBJs with the given             name.
 
+## OBJ conversion to GLTF/GLB
+https://github.com/AnalyticalGraphicsInc/obj2gltf
+Make sure to have the latest version of Node.js 
 
 ### Refs:
 - https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/      14/06/19
