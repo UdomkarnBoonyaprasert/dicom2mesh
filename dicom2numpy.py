@@ -1,5 +1,4 @@
 import numpy as np
-import platform
 import pydicom as dicom
 import pydicom.pixel_data_handlers.gdcm_handler
 import os
@@ -9,17 +8,13 @@ import scipy.ndimage
 import fileHandler
 import time
 
-#-----------Unix uses "/", whereas Windows uses "\"-----------
-slash = "/"
-runningPlatform = platform.system()
-if runningPlatform == "Windows":
-	slash = "\\"
-#-------------------------------------------------------------
-
+slash = fileHandler.slash
 cwd = os.getcwd() + slash
 
-fName = fileHandler.getFname("dir", fileHandler.dicomPath)
-fullPath = fileHandler.dicomPath + str(fName) + slash
+def getIO():
+	fName = fileHandler.getFname("dir", fileHandler.dicomPath)
+	tempPath = fileHandler.dicomPath + str(fName) + slash
+	return [tempPath, fName]
 
 def load_scan(scanPath=fileHandler.dicomPath + "samples" + slash):
 	slices = [dicom.read_file(scanPath + slash + s) for s in os.listdir(scanPath)]
@@ -60,7 +55,7 @@ def get_pixels_hu(scans):
 
 
 
-def resample(dataPath=fullPath, new_spacing=[1,1,1]):#was:   def resample(image, scan, new_spacing=[1,1,1], dataPath=fullPath):
+def resample(dataPath=fileHandler.dicomPath + slash + "samples", new_spacing=[1,1,1]):#was:   def resample(image, scan, new_spacing=[1,1,1], dataPath=fullPath):
 	scan = load_scan(dataPath)
 	image = get_pixels_hu(scan)
 	print ("Shape before resampling\t", image.shape)
@@ -88,11 +83,16 @@ def resample(dataPath=fullPath, new_spacing=[1,1,1]):#was:   def resample(image,
 	
 	return image, new_spacing
 
+def main(inputPath=fileHandler.dicomPath + slash + "samples", mainFname="samples", option=0):
+	imgs_after_resamp, spacing = resample(inputPath)
+	if option == 1:
+		np.save(fileHandler.numpyPath + "%s.npy" % mainFname, imgs_after_resamp)
+		return 0
+	return imgs_after_resamp
 
-imgs_after_resamp, spacing = resample()
-
-
-
-np.save(fileHandler.numpyPath + "%s.npy" % fName, imgs_after_resamp)
+if __name__ == '__main__':
+	lsIO = getIO()
+	temp = main(lsIO[0], lsIO[1], 1)
+	print(lsIO[1] + ".npy generated.")
 
 

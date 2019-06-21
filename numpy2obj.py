@@ -11,7 +11,6 @@ import nibabel as nib
 import pydicom as dicom
 import pydicom.pixel_data_handlers.gdcm_handler
 import os
-import platform
 import time
 import matplotlib.pyplot as plt
 from glob import glob
@@ -21,16 +20,11 @@ from skimage import morphology
 from skimage import measure
 from skimage.transform import resize
 from sklearn.cluster import KMeans
+import fileHandler
 
 nib.Nifti1Header.quaternion_threshold = -1e-06
 
-#-----------Unix uses "/", whereas Windows uses "\"-----------
-slash = "/"
-runningPlatform = platform.system()
-if runningPlatform == "Windows":
-	slash = "\\"
-#-------------------------------------------------------------
-
+slash = fileHandler.slash
 cwd = os.getcwd() + slash
 
 imgPath = cwd + "imgs" + slash
@@ -47,55 +41,65 @@ def make_mesh(image, threshold=300, step_size=1):
 	verts, faces, norm, val = measure.marching_cubes_lewiner(p, threshold, step_size=step_size, allow_degenerate=True) 
 	return verts, faces, norm
 
-lsdirNumpy = os.listdir(numpyPath)
+def getIO():
+	fName = fileHandler.getFname(".npy", numpyPath)
+	tempPath = fileHandler.dicomPath + str(fName) + slash
+	thresholdinput = input("Please enter HU threshold(int):  ")
+	return [tempPath, fName, thresholdinput]
+#fileChoice = fileHandler.getFname(".npy", numpyPath)
 
-fileChoice = input("Please enter numpy file name (with .npy extension), or enter 'lsdir' to select from a list:  ")
-if fileChoice == "lsdir":
-	lsdirNumpy = os.listdir(numpyPath)
-	if len(lsdirNumpy) == 0:
-		print("No munpy file found, exiting...")
-		exit()
-	counter = 0
-	for direc in lsdirNumpy:
-		print(str(counter) + ".)\t" + direc)
-		counter = counter + 1
-	tempInt = input("Please enter choice(int):  ")
-	fileChoice = str(lsdirNumpy[int(tempInt)])
-if fileChoice[len(fileChoice)-4:] != ".npy":
-	print("Not a valid file choice(.npy), exiting...")
-	exit()
 
-try:
-	tempnif = np.load(numpyPath + fileChoice)
-except:
-	print("Something went wrong with the numpy loading process, exiting...")
-	exit()
-thresholdinput = input("Please enter HU threshold(int):  ")
+#thresholdinput = input("Please enter HU threshold(int):  ")
 #v, f, n = make_mesh(imgs_after_resamp, int(thresholdinput), 1)#350
 #plt_3d(v, f)
 
 start = time.time()
 
-v, f, n = make_mesh(tempnif, int(thresholdinput), 1)#350
+
+def makeObj(fPath, thisThreshold, objOutput):
+	if str(type(fPath)) == "<class 'numpy.ndarray'>":
+		tempnumpy = fPath
+	else:
+		try:
+			tempnumpy = np.load(numpyPath + fPath)
+		except:
+			print("Something went wrong with the numpy loading process, exiting...")
+			exit()
+
+	v, f, n = make_mesh(tempnumpy, int(thisThreshold), 1)#350
 
 
-f=f+1#not sure why we need this. the mesh looks 'weird' without it      solution ref >>>>>>   https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python      18/06/19
+	f=f+1#not sure why we need this. the mesh looks 'weird' without it      solution ref >>>>>>   https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python      18/06/19
 
 
-objOutput = input("Please enter name for 'obj' file(without .obj extension):  ")
-newObj = open(outputPath + 'OBJs/%s.obj' % objOutput, 'w')
-for item in v:
-	newObj.write("v {0} {1} {2}\n".format(item[0],item[1],item[2]))
+	#objOutput = input("Please enter name for 'obj' file(without .obj extension):  ")
+	newObj = open(outputPath + 'OBJs/%s.obj' % objOutput, 'w')
+	for item in v:
+		newObj.write("v {0} {1} {2}\n".format(item[0],item[1],item[2]))
 
-for item in n:
-	newObj.write("vn {0} {1} {2}\n".format(item[0],item[1],item[2]))
+	for item in n:
+		newObj.write("vn {0} {1} {2}\n".format(item[0],item[1],item[2]))
 
-for item in f:
-	newObj.write("f {0}//{0} {1}//{1} {2}//{2}\n".format(item[0],item[1],item[2]))  
-newObj.close()
+	for item in f:
+		newObj.write("f {0}//{0} {1}//{1} {2}//{2}\n".format(item[0],item[1],item[2]))  
+	newObj.close()
 
-timeTaken = time.time() - start
 
-print ("Task finsished. Time taken to generate mesh:  " + str(timeTaken) + " seconds")
+def main(mainFchoice, mainThreshold):
+	makeObj(mainFchoice, mainThreshold)
+
+def main(mainFchoice, mainThreshold, outputName):
+	makeObj(mainFchoice, mainThreshold, outputName)
+
+if __name__ == '__main__':
+	lsIO = getIO()
+	tempInput = input("Please enter name for 'obj' file(without .obj extension), or leave blank for the same name as .npy:  ")
+	if str(tempInput) == "":
+		tempInput = lsIO[1]
+	main(lsIO[1], lsIO[2], tempInput)
+
+	timeTaken = time.time() - start
+	print ("Task finsished. Time taken to generate mesh:  " + str(timeTaken) + " seconds")
+
 
 
