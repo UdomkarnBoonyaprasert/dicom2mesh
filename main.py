@@ -17,23 +17,26 @@ threshold = sys.argv[3]
 foutput = str(sys.argv[4])
 #npysaveoption = sys.argv[5]#not here yet (option to save npy)
 
-if option == 1 or str(option) == "d":#dicom
+if int(option) == 1 or str(option) == "d":#dicom
 	tempNpy = dicom2numpy.main(fileHandler.dicomPath + slash + fname, fname)#not done
 	if argCount == 5:
 		numpy2obj.main(tempNpy, threshold, foutput)
 	else:
 		numpy2obj.main(tempNpy, threshold)
 
-elif option == 2 or str(option) == "n":#nifti
+elif int(option) == 2 or str(option) == "n":#nifti
 	tempNpy = nifti2numpy.main(fileHandler.niftiPath + slash + fname, fname)#not done
 	if argCount == 5:
 		numpy2obj.main(tempNpy, threshold, foutput)
 	else:
 		numpy2obj.main(tempNpy, threshold)
 
-elif option == 3 or str(option) == "num":#numpy
+elif int(option) == 3 or str(option) == "num":#numpy
 	if argCount == 5:
 		numpy2obj.main(tempNpy, threshold, foutput)
 	else:
 		numpy2obj.main(tempNpy, threshold)
 	print ("Numpy to obj conversion, done")
+
+
+	
