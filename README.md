@@ -14,7 +14,7 @@ Python 3.7 or above
 ## Usage:
 - The code works by first converting Dicom or Nifti images to a Numpy array, then generate a .obj mesh from it.
 - dicom2numpy.py, nifti2numpy.py and numpy2obj.py can be run independently:
-> python3 dicom2numpy. 
+> python3 dicom2numpy.py
 
 - For a one way Dicom/Nifti to obj mesh, main.py can be used.
     - An example usage of main.py: 
