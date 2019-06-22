@@ -6,10 +6,12 @@ Python 3.7 or above
 
 ## Dependencies:
 - Numpy https://www.numpy.org/
+- Scipy https://www.scipy.org/
 - Pydicom https://pydicom.github.io/
-- Skimage https://scikit-image.org/
+- Skit-image https://scikit-image.org/
+- Sklearn https://scikit-learn.org/stable/
 - NiBabel https://nipy.org/nibabel/
-- Mathplotlib https://pypi.org/project/matplotlib/
+- Matplotlib https://pypi.org/project/matplotlib/
 
 ## Usage:
 - The code works by first converting Dicom or Nifti images to a Numpy array, then generate a .obj mesh from it.
