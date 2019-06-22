@@ -5,13 +5,15 @@ A simple Python script which utilises marching cubes algorithm(skimage library) 
 Python 3.7 or above
 
 ## Dependencies:
-- Numpy https://www.numpy.org/
-- Scipy https://www.scipy.org/
+- Anaconda https://www.anaconda.com/distribution/ (or alternatively, each dependencies can be install separately)
+    - Numpy https://www.numpy.org/
+    - Scipy https://www.scipy.org/
+    - Matplotlib https://pypi.org/project/matplotlib/
 - Pydicom https://pydicom.github.io/
+- GDCM http://gdcm.sourceforge.net/wiki/index.php/Main_Page (https://github.com/malaterre/GDCM/releases/tag/v3.0.0)
 - Skit-image https://scikit-image.org/
 - Sklearn https://scikit-learn.org/stable/
 - NiBabel https://nipy.org/nibabel/
-- Matplotlib https://pypi.org/project/matplotlib/
 
 ## Usage:
 - The code works by first converting Dicom or Nifti images to a Numpy array, then generate a .obj mesh from it.
