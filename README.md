@@ -10,7 +10,7 @@ Python 3.7 or above
     - Scipy https://www.scipy.org/
     - Matplotlib https://pypi.org/project/matplotlib/
 - Pydicom https://pydicom.github.io/
-- GDCM http://gdcm.sourceforge.net/wiki/index.php/Main_Page (https://github.com/malaterre/GDCM/releases/tag/v3.0.0)
+- GDCM http://gdcm.sourceforge.net/wiki/index.php/Main_Page (conda install -c conda-forge gdcm)
 - Skit-image https://scikit-image.org/
 - Sklearn https://scikit-learn.org/stable/
 - NiBabel https://nipy.org/nibabel/
